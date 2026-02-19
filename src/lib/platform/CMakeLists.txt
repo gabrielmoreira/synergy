@@ -14,6 +14,11 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+option(SYNERGY_USE_CLIPBOARD_TRIM "Trim transparent edges from clipboard bitmaps" OFF)
+if(SYNERGY_USE_CLIPBOARD_TRIM)
+  add_definitions(-DSYNERGY_USE_CLIPBOARD_TRIM)
+endif()
+
 if(WIN32)
   file(GLOB headers "MSWindows*.h")
   file(GLOB sources "MSWindows*.cpp")
@@ -66,6 +71,10 @@ endif()
 include_directories(${inc})
 add_library(platform STATIC ${sources})
 target_link_libraries(platform client ${libs})
+
+if(WIN32)
+  target_link_libraries(platform gdiplus)
+endif()
 
 macro(link_wayland_libs)
   target_link_libraries(platform ${LIBXKBCOMMON_LINK_LIBRARIES}
