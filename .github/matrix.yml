@@ -1,10 +1,10 @@
 target:
   - name: windows-2022-x64
-    runs-on: windows-latest-16-cores
+    runs-on: windows-latest
     package-os: windows-x64
 
   - name: windows-2022-x64-trim
-    runs-on: windows-latest-16-cores
+    runs-on: windows-latest
     package-os: windows-x64
     use-trim: true
 
@@ -24,7 +24,7 @@ target:
       options: --privileged
 
   - name: flatpak-arm64
-    runs-on: ubuntu-24.04-8-core-arm64
+    runs-on: ubuntu-24.04
     arch: aarch64
     container:
       image: ghcr.io/flathub-infra/flatpak-github-actions:kde-6.8
