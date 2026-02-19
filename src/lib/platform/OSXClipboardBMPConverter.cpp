@@ -108,13 +108,12 @@ String OSXClipboardBMPConverter::toIClipboard(const String &bmp) const
     return String();
   }
 
-  // get offset to image data
-  UInt32 offset = fromLEU32(rawBMPHeader + 10);
-
-  // construct BMP
-  if (offset == 14 + 40) {
-    return bmp.substr(14);
-  } else {
-    return bmp.substr(14, 40) + bmp.substr(offset, bmp.size() - offset);
-  }
+  // Strip only the 14-byte BMP file header and keep the complete DIB structure
+  // (BITMAPINFOHEADER + optional BI_BITFIELDS masks + optional palette + pixels).
+  //
+  // The old code stripped BI_BITFIELDS mask bytes when the pixel offset was
+  // non-standard (e.g. 66 instead of 54), but left biCompression=BI_BITFIELDS
+  // in the header — producing an inconsistent internal DIB that confused GDI+.
+  // Keeping the full structure ensures the DIB is well-formed on the Windows side.
+  return bmp.substr(14);
 }
