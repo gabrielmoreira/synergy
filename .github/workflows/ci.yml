@@ -128,6 +128,10 @@ jobs:
           # Used by the package script to name the output files.
           echo "SYNERGY_VERSION=${{ needs.get-version.outputs.version }}" >> $GITHUB_ENV
 
+          if [ "${{ matrix.target.use-trim }}" = "true" ]; then
+            echo "trim-flag=-DSYNERGY_USE_CLIPBOARD_TRIM=ON" >> $GITHUB_OUTPUT
+          fi
+
       - name: Setup Linux
         if: ${{ runner.os == 'Linux' && !steps.vars.outputs.is-flatpak }}
         id: setup-linux
@@ -193,6 +197,7 @@ jobs:
             -DSYNERGY_VERSION_RELEASE=${{ env.SYNERGY_VERSION_RELEASE }}
             -DSYNERGY_VERSION_SNAPSHOT=${{ env.SYNERGY_VERSION_SNAPSHOT }}
             -DSYNERGY_VERSION_GIT_SHA=${{ env.SYNERGY_VERSION_GIT_SHA }}
+            ${{ steps.vars.outputs.trim-flag }}
             ${{ steps.install-deps.outputs.vcpkg-cmake-config }}
 
       - name: Tests

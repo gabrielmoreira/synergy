@@ -3,6 +3,11 @@ target:
     runs-on: windows-latest-16-cores
     package-os: windows-x64
 
+  - name: windows-2022-x64-trim
+    runs-on: windows-latest-16-cores
+    package-os: windows-x64
+    use-trim: true
+
   - name: macos-14-arm64
     runs-on: macos-14
     package-os: macos-arm64
